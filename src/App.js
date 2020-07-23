@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-
 import {
   FormControl,
   MenuItem,
@@ -10,10 +9,14 @@ import {
 import "./App.css";
 import InfoBox from "./InfoBox";
 import Map from "./Map";
+import Table from "./Table";
+import { sortData } from "./util";
+import LineGraph from "./LineGraph";
 function App() {
-  const [countries, setCountries] = useState(["USA", "UK"]);
+  const [countries, setCountries] = useState([]);
   const [country, setCountry] = useState("worldwide");
-  const [countryInfo, setCountryInfo] = useState({});
+  const [countryInfo, setCountryInfo] = useState({}); //An empty object
+  const [tableData, setTableData] = useState([]); //An empty array
   useEffect(() => {
     fetch("https://disease.sh/v3/covid-19/all")
       .then((response) => response.json())
@@ -31,6 +34,8 @@ function App() {
             value: country.countryInfo.iso2,
             // value: country.country,
           }));
+          const sortedData = sortData(data);
+          setTableData(sortedData);
           setCountries(countries);
           // console.log(data);
           // console.log(countries);
@@ -58,7 +63,7 @@ function App() {
         setCountryInfo(data); //storecountry's data
       });
   };
-  console.log(countryInfo);
+  // console.log(countryInfo);
   return (
     <div className="app">
       <div className="app__left">
@@ -99,7 +104,10 @@ function App() {
       <Card className="app__right">
         <CardContent>
           <h3>Live Cases by Country</h3>
+          <Table countries={tableData} />
+
           <h3>Worldwide New Cases</h3>
+          <LineGraph />
         </CardContent>
       </Card>
     </div>
