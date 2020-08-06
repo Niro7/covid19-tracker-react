@@ -1,5 +1,7 @@
 import React from "react";
 import "./Table.css";
+import { numeral } from "numeral";
+import NumberFormat from "react-number-format";
 function Table({ countries }) {
   return (
     <div className="table">
@@ -7,7 +9,13 @@ function Table({ countries }) {
         <tr>
           <td>{country}</td>
           <td>
-            <strong>{cases}</strong>
+            <strong>
+              <NumberFormat
+                value={cases}
+                displayType={"text"}
+                thousandSeparator={true}
+              />
+            </strong>
           </td>
         </tr>
       ))}

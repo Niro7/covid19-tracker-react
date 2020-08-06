@@ -10,9 +10,8 @@ import "./App.css";
 import InfoBox from "./InfoBox";
 import Map from "./Map";
 import Table from "./Table";
-import { sortData } from "./util";
+import { sortData, prettyPrintStat } from "./util";
 import LineGraph from "./LineGraph";
-import numeral from "numeral";
 import "leaflet/dist/leaflet.css";
 function App() {
   const [countries, setCountries] = useState([]);
@@ -22,6 +21,7 @@ function App() {
   const [mapCenter, setMapCenter] = useState({ lat: 34.80746, lng: -40.4796 });
   const [mapZoom, setMapZoom] = useState(3);
   const [mapCountries, setMapCountries] = useState([]);
+  const [casesType, setCasesType] = useState("cases");
   useEffect(() => {
     fetch("https://disease.sh/v3/covid-19/all")
       .then((response) => response.json())
@@ -94,22 +94,18 @@ function App() {
         <div className="app__stats">
           <InfoBox
             title="Coronavirus Cases"
-            cases={numeral(countryInfo.todayCases).format("+0,0").toUpperCase()}
-            total={numeral(countryInfo.cases).format("0a").toUpperCase()}
+            cases={prettyPrintStat(countryInfo.todayCases)}
+            total={prettyPrintStat(countryInfo.cases)}
           />
           <InfoBox
             title="Recovered"
-            cases={numeral(countryInfo.todayRecovered)
-              .format("+0,0")
-              .toUpperCase()}
-            total={numeral(countryInfo.recovered).format("0a").toUpperCase()}
+            cases={prettyPrintStat(countryInfo.todayRecovered)}
+            total={prettyPrintStat(countryInfo.recovered)}
           />
           <InfoBox
             title="Deaths"
-            cases={numeral(countryInfo.todayDeaths)
-              .format("+0,0")
-              .toUpperCase()}
-            total={numeral(countryInfo.deaths).format("0a").toUpperCase()}
+            cases={prettyPrintStat(countryInfo.todayDeaths)}
+            total={prettyPrintStat(countryInfo.deaths)}
           />
         </div>
         <Map countries={mapCountries} center={mapCenter} zoom={mapZoom} />
