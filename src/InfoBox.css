@@ -3,10 +3,20 @@
     so it's in a row and space-between in App.css */
 
   flex: 1; /* Take up as much room as it can */
+  cursor: pointer;
 }
 
 .infoBox:not(:last-child) {
   margin-right: 15px; /*Apply Style except the last child*/
+}
+.infoBox--selected {
+  border-top: 10px solid greenyellow;
+}
+.infoBox--red {
+  border-color: #ff002f;
+}
+.infoBox__cases--green {
+  color: lightgreen !important;
 }
 .infoBox__cases {
   color: #cc1034;

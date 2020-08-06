@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import numeral from "numeral";
 const options = {
-  // legend: {
-  //   display: false,
-  // },
+  legend: {
+    display: false,
+  },
   elements: {
     point: {
       radius: 0,
@@ -44,32 +44,32 @@ const options = {
     ],
   },
 };
-
-function LineGraph({ casesType = "cases" }) {
-  const [data, setData] = useState({});
-  const buildChartData = (data, casesType) => {
-    const chartData = [];
-    let lastDataPoint;
-    // data.cases.forEach((date) =>
-    for (let date in data.cases) {
-      if (lastDataPoint) {
-        let newDataPoint = {
-          x: date,
-          y: data[casesType][date] - lastDataPoint,
-        };
-        chartData.push(newDataPoint);
-      }
-      lastDataPoint = data[casesType][date];
+const buildChartData = (data, casesType) => {
+  const chartData = [];
+  let lastDataPoint;
+  // data.cases.forEach((date) =>
+  for (let date in data.cases) {
+    if (lastDataPoint) {
+      let newDataPoint = {
+        x: date,
+        y: data[casesType][date] - lastDataPoint,
+      };
+      chartData.push(newDataPoint);
     }
-    // console.log(data);
-    return chartData;
-  };
+    lastDataPoint = data[casesType][date];
+  }
+  // console.log(data);
+  return chartData;
+};
+function LineGraph({ casesType = "cases", ...props }) {
+  const [data, setData] = useState({});
+
   useEffect(() => {
     const fetchData = async () => {
       await fetch("https://disease.sh/v3/covid-19/historical/all?lastdays=120")
         .then((response) => response.json())
         .then((data) => {
-          let chartData = buildChartData(data, "cases");
+          let chartData = buildChartData(data, casesType);
           setData(chartData);
           // console.log(chartData);
         });
@@ -78,8 +78,7 @@ function LineGraph({ casesType = "cases" }) {
   }, [casesType]);
 
   return (
-    <div className="linegraph">
-      <h1>Line Graph Here</h1>
+    <div className={props.className}>
       {/* Optional chaining: data && data.length */}
       {data?.length > 0 && (
         <Line
